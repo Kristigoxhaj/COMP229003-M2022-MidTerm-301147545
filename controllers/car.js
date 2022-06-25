@@ -90,14 +90,54 @@ module.exports.processAddPage = (req, res, next) => {
 // Gets a car by id and renders the Edit form using the add_edit.ejs template
 module.exports.displayEditPage = (req, res, next) => {
     
-    // ADD YOUR CODE HERE
+       let id = req.params.id;
+
+       CarModel.findById(id, (err, carToEdit) => {
+           if(err)
+           {
+               console.log(err);
+               res.end(err);
+           }
+           else
+           {
+               //show the edit view
+               res.render('cars/add_edit', {
+                   title: 'Add Edit Car Form',
+                   car: carToEdit,
+                   userName: req.user ? req.user.username : ''
+               })
+           }
+       });
 
 }
 
 // Processes the data submitted from the Edit form to update a car
 module.exports.processEditPage = (req, res, next) => {
+
+   let id = req.params.id;
     
-    // ADD YOUR CODE HERE
+   CarModel.findOneAndUpdate({_id: id}, req.body, {upsert: true}, function(err, doc) {
+       if (err) {
+
+        let message = getErrorMessage(err);
+                   req.flash('error', message);
+                   return res.render('cars/add_edit', {
+                             title: 'Add Edit Car Form',
+                             messages: req.flash('error'),
+                             car: car,
+                             userName: req.user ? req.user.username : ''
+                   });
+
+       }
+       else
+       {
+       return res.redirect('/cars/list');
+
+       }
+
+   });
+
+
     
 }
 
