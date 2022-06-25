@@ -46,14 +46,41 @@ module.exports.details = (req, res, next) => {
 // Renders the Add form using the add_edit.ejs template
 module.exports.displayAddPage = (req, res, next) => {
     
-    // ADD YOUR CODE HERE        
+     let newCar = CarModel();
+
+     res.render('cars/add_edit', {
+       title: 'Add Edit Car Form',
+       messages: req.flash('error'),
+       car: newCar
+     });
+
+
 
 }
 
 // Processes the data submitted from the Add form to create a new car
 module.exports.processAddPage = (req, res, next) => {
 
-    // ADD YOUR CODE HERE
+    let car = new CarModel(req.body);
+    car.save((err) => {
+          if (err) {
+            let message = getErrorMessage(err);
+            req.flash('error', message);
+            return res.render('cars/add_edit', {
+                      title: 'Add Edit Car Form',
+                      messages: req.flash('error'),
+                      car: car
+                    });
+
+          }else{
+
+           return res.redirect('/cars/list');
+
+          }
+
+   })
+
+
 
 }
 
