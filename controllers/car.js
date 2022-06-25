@@ -37,7 +37,8 @@ module.exports.details = (req, res, next) => {
             //show the edit view
             res.render('cars/details', {
                 title: 'Car Details', 
-                car: carToShow
+                car: carToShow,
+                userName: req.user ? req.user.username : ''
             })
         }
     });
@@ -51,7 +52,8 @@ module.exports.displayAddPage = (req, res, next) => {
      res.render('cars/add_edit', {
        title: 'Add Edit Car Form',
        messages: req.flash('error'),
-       car: newCar
+       car: newCar,
+       userName: req.user ? req.user.username : ''
      });
 
 
@@ -69,7 +71,8 @@ module.exports.processAddPage = (req, res, next) => {
             return res.render('cars/add_edit', {
                       title: 'Add Edit Car Form',
                       messages: req.flash('error'),
-                      car: car
+                      car: car,
+                      userName: req.user ? req.user.username : ''
                     });
 
           }else{
@@ -101,6 +104,20 @@ module.exports.processEditPage = (req, res, next) => {
 // Deletes a car based on its id.
 module.exports.performDelete = (req, res, next) => {
     
-    // ADD YOUR CODE HERE
+       let id = req.params.id;
+
+       CarModel.findOneAndDelete({_id: id}, function (err, car) {
+           if (err){
+               console.log(err);
+
+           }
+           else{
+               console.log("Deleted Car : ", car);
+
+           }
+
+           return res.redirect('/cars/list');
+       });
+
 
 }
