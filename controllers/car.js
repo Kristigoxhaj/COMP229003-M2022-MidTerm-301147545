@@ -1,3 +1,11 @@
+/**
+ * @filename car.js
+ * @author Kristi Goxhaj
+ * @studentID 301147545
+ * @Web App name COMP229003-M2022-MidTerm-301147545
+ */
+
+
 // create a reference to the model
 let CarModel = require('../models/car');
 
